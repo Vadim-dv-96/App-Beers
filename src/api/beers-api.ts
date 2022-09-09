@@ -6,12 +6,21 @@ const instance = axios.create({
 });
 export const beersApi = {
   getBeers() {
-    return instance.get<Array<BeersType>>('beers?page=1&per_page=20');
+    return instance.get<Array<BeersType>>('beers?page=1&per_page=15');
   },
   getBeersWithPizza() {
-    return instance.get<Array<BeersType>>('beers?food=pizza&page=1&per_page=20');
+    return instance.get<Array<BeersType>>('beers?food=pizza&page=1&per_page=15');
   },
   getBeersWithSteak() {
-    return instance.get<Array<BeersType>>('beers?food=steak&page=1&per_page=25');
+    return instance.get<Array<BeersType>>('beers?food=steak&page=1&per_page=15');
+  },
+  getNextBeers(numbPage: number) {
+    return instance.get<Array<BeersType>>(`beers?page=${numbPage}&per_page=15`);
+  },
+  getNextBeersForPizza(numbPage: number) {
+    return instance.get<Array<BeersType>>(`beers?food=pizza&page=${numbPage}&per_page=15`);
+  },
+  getNextBeersForSteak(numbPage: number) {
+    return instance.get<Array<BeersType>>(`beers?food=steak&page=${numbPage}&per_page=15`);
   },
 };

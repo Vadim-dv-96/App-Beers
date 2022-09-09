@@ -7,6 +7,7 @@ export type BeersType = {
   abv: number;
   name: string;
   image_url: string;
+  beersLenth: number;
   // description: string;
 };
 
@@ -24,7 +25,9 @@ export const BeerItem = (props: BeersType) => {
           </div>
         </div>
         <div className="btn">
-          <Button variant="outlined">LEARN MORE</Button>
+          <Button size="small" variant="outlined">
+            LEARN MORE
+          </Button>
         </div>
       </Card>
     </div>
