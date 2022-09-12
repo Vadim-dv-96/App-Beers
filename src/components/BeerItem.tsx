@@ -2,12 +2,13 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import '../App.css';
 
+export type SortValuesType = 'Without a filter' | 'ABV ascending' | 'ABV descending' | 'A-Z' | 'Z-A';
+
 export type BeersType = {
   id: number;
   abv: number;
   name: string;
   image_url: string;
-  beersLenth: number;
   // description: string;
 };
 

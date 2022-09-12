@@ -1,40 +1,41 @@
 import Button from '@mui/material/Button';
-import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { getNextBeersForSteakTC, getNextBeersTC } from '../state/beers-reducer';
-
-// export type ValueTabType = 'All beers' | 'with pizza' | 'with steak';
+import { useAppSelector } from '../hooks/hooks';
 
 type PaginPropsType = {
-  // nextPageHandler: (pageNumb: number) => void;
-  valueTab: string;
+  valueTab: 'All beers' | 'with pizza' | 'with steak';
+  changePage: (key: 'All beers' | 'with pizza' | 'with steak', page: number) => void;
+  pages: { [key in 'All beers' | 'with pizza' | 'with steak']: number };
 };
 
-export function Pagination(props: PaginPropsType) {
-  const beers = useAppSelector((state) => state.beers);
-  console.log(beers);
-  const dispatch = useAppDispatch();
+export function Pagination({ valueTab, changePage, pages }: PaginPropsType) {
+  const beers = useAppSelector((state) => state.beer.beers);
 
-  let [page, setPage] = useState<number>(1);
+  // let [page, setPage] = useState<number>(pages[valueTab]);
 
-  const nextPage = (pageNumb: number) => {
-    if (props.valueTab === 'with steak') {
-      dispatch(getNextBeersForSteakTC(pageNumb));
-    }
-    if (props.valueTab === 'All beers') {
-      dispatch(getNextBeersTC(pageNumb));
-    }
-  };
+  // const nextPage = (pageNumb: number) => {
+  //   // if (props.valueTab === 'with pizza') {
+  //   // }
+  //   // if (valueTab === 'with steak') {
+  //   //   dispatch(getNextBeersForSteakTC(pageNumb));
+  //   // }
+  //   // if (valueTab === 'All beers') {
+  //   //   dispatch(getNextBeersTC(pageNumb));
+  //   // }
+  // };
   // const nextPage = (page: number) => {
   //   props.nextPageHandler(page);
   // };
-  const setPageinc = () => {
-    setPage(++page);
-    nextPage(page);
+  const setPageinc = (pageNumb: number) => {
+    // const pageNumb = ++page;
+    // setPage(pageNumb);
+    // nextPage(pageNumb);
+    changePage(valueTab, pageNumb);
   };
-  const setPagedec = () => {
-    setPage(--page);
-    nextPage(page);
+  const setPagedec = (pageNumb: number) => {
+    // const pageNumb = --page;
+    // setPage(pageNumb);
+    // nextPage(pageNumb);
+    changePage(valueTab, pageNumb);
   };
 
   return (
@@ -43,18 +44,18 @@ export function Pagination(props: PaginPropsType) {
         size="small"
         variant="outlined"
         style={{ marginRight: '6px' }}
-        disabled={page === 1}
-        onClick={() => setPagedec()}
+        disabled={pages[valueTab] === 1}
+        onClick={() => setPagedec(--pages[valueTab])}
       >
         back
       </Button>
-      <div> {page} </div>
+      <div> {pages[valueTab]} </div>
       <Button
-        disabled={page === 13 || beers.length < 15}
+        disabled={beers.length < 15}
         size="small"
         variant="outlined"
         style={{ marginLeft: '6px' }}
-        onClick={() => setPageinc()}
+        onClick={() => setPageinc(++pages[valueTab])}
       >
         next
       </Button>

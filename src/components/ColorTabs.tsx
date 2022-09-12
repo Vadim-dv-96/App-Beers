@@ -3,28 +3,65 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useAppDispatch } from '../hooks/hooks';
-import { getBeersTC, getBeersWithPizzaTC, getBeersWithSteakTC } from '../state/beers-reducer';
+import {
+  getBeersTC,
+  getBeersWithFoodTC,
+  // getBeersWithPizzaTC,
+  // getBeersWithSteakTC,
+  // getNextBeersForSteakTC,
+  // getNextBeersTC,
+} from '../state/beers-reducer';
 import { useState } from 'react';
 import { Pagination } from './Pagination';
 
 export function ColorTabs() {
-  const [value, setValue] = useState('All beers');
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const [value, setValue] = useState<'All beers' | 'with pizza' | 'with steak'>('All beers');
 
   const dispatch = useAppDispatch();
 
-  const beerswithPizzaHandler = () => {
-    dispatch(getBeersWithPizzaTC());
+  const [pages, setPages] = useState({
+    'All beers': 1,
+    'with pizza': 1,
+    'with steak': 1,
+  });
+  console.log(pages);
+
+  const changePage = (key: 'All beers' | 'with pizza' | 'with steak', page: number) => {
+    setPages((prev) => ({
+      ...prev,
+      [key]: page,
+    }));
+    if (key === 'with steak') {
+      debugger;
+      // dispatch(getNextBeersForSteakTC(page));
+      dispatch(getBeersWithFoodTC(page, 'steak'));
+    }
+    if (key === 'All beers') {
+      debugger;
+      dispatch(getBeersTC(page));
+    }
   };
+
+  const handleChange = (event: React.SyntheticEvent, newValue: 'All beers' | 'with pizza' | 'with steak') => {
+    setValue(newValue);
+  };
+
+  // const beerswithPizzaHandler = () => {
+  //   dispatch(getBeersWithPizzaTC());
+  // };
+  const beerswithPizzaHandler = () => {
+    dispatch(getBeersWithFoodTC(pages['with pizza'], 'pizza'));
+  };
+  // const beerswithSteakHandler = () => {
+  //   dispatch(getBeersWithSteakTC());
+  // };
   const beerswithSteakHandler = () => {
-    dispatch(getBeersWithSteakTC());
+    dispatch(getBeersWithFoodTC(pages['with steak'], 'steak'));
   };
   const allBeersHandler = () => {
-    dispatch(getBeersTC());
+    dispatch(getBeersTC(pages['All beers']));
   };
+
   return (
     <div>
       <Box sx={{ width: '100%' }}>
@@ -40,7 +77,7 @@ export function ColorTabs() {
           <Tab onClick={beerswithSteakHandler} value="with steak" label="Beers that pair with steak" />
         </Tabs>
       </Box>
-      <Pagination valueTab={value} />
+      <Pagination valueTab={value} pages={pages} changePage={changePage} />
     </div>
   );
 }

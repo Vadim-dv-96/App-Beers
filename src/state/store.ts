@@ -4,7 +4,7 @@ import { appReducer, AppReducerActionType } from './app-reducer';
 import { BeersActionsType, beersReducer } from './beers-reducer';
 
 export const rootReducer = combineReducers({
-  beers: beersReducer,
+  beer: beersReducer,
   api: appReducer,
 });
 

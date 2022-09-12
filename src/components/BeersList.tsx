@@ -2,26 +2,27 @@ import { Card, FormControl, FormControlLabel, Radio } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { getBeersTC } from '../state/beers-reducer';
+import { sortBeers } from '../sort/sort';
+import { getBeersTC, sortBeersAC } from '../state/beers-reducer';
 import { BeerItem } from './BeerItem';
 
 export const BeersList = () => {
   const dispatch = useAppDispatch();
+  const numberPage = useAppSelector((state) => state.beer.numberPage);
 
-  const beers = useAppSelector((state) => state.beers);
+  useEffect(() => {
+    dispatch(getBeersTC(numberPage));
+  }, [dispatch]);
 
   const [value, setValue] = useState('Without a filter');
 
-  useEffect(() => {
-    dispatch(getBeersTC());
-  }, [dispatch]);
+  const beers = useAppSelector(sortBeers);
 
-  // const nextPageHandler = (pageNumb: number) => {
-  //   dispatch(getNextBeersTC(pageNumb));
-  // };
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
+    console.log(e.currentTarget.value);
   };
+
   return (
     <>
       <div className="main">
@@ -34,11 +35,46 @@ export const BeersList = () => {
               value={value}
               onChange={onChangeHandler}
             >
-              <FormControlLabel value="Without a filter" control={<Radio />} label="Without a filter" />
-              <FormControlLabel value="ABV ascending" control={<Radio />} label="ABV ascending" />
-              <FormControlLabel value="ABV descending" control={<Radio />} label="ABV descending" />
-              <FormControlLabel value="A-Z" control={<Radio />} label="A-Z" />
-              <FormControlLabel value="Z-A" control={<Radio />} label="Z-A" />
+              <FormControlLabel
+                onClick={() => {
+                  dispatch(sortBeersAC('Without a filter'));
+                }}
+                value="Without a filter"
+                control={<Radio />}
+                label="Without a filter"
+              />
+              <FormControlLabel
+                onClick={() => {
+                  dispatch(sortBeersAC('ABV ascending'));
+                }}
+                value="ABV ascending"
+                control={<Radio />}
+                label="ABV ascending"
+              />
+              <FormControlLabel
+                onClick={() => {
+                  dispatch(sortBeersAC('ABV descending'));
+                }}
+                value="ABV descending"
+                control={<Radio />}
+                label="ABV descending"
+              />
+              <FormControlLabel
+                onClick={() => {
+                  dispatch(sortBeersAC('A-Z'));
+                }}
+                value="A-Z"
+                control={<Radio />}
+                label="A-Z"
+              />
+              <FormControlLabel
+                onClick={() => {
+                  dispatch(sortBeersAC('Z-A'));
+                }}
+                value="Z-A"
+                control={<Radio />}
+                label="Z-A"
+              />
             </RadioGroup>
           </FormControl>
           {/* <div className="filter-ascending">

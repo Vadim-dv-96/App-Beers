@@ -33,9 +33,11 @@ function App() {
         </AppBar>
       </ThemeProvider>
       {status === 'loading' && <LinearProgress />}
+
       <div className="tabs">
         <ColorTabs />
       </div>
+
       <BeersList />
     </Box>
   );
