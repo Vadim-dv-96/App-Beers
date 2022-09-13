@@ -13,6 +13,7 @@ import {
 } from '../state/beers-reducer';
 import { useState } from 'react';
 import { Pagination } from './Pagination';
+import { BeersList } from './BeersList';
 
 export function ColorTabs() {
   const [value, setValue] = useState<'All beers' | 'with pizza' | 'with steak'>('All beers');
@@ -66,6 +67,7 @@ export function ColorTabs() {
     <div>
       <Box sx={{ width: '100%' }}>
         <Tabs
+          centered
           value={value}
           onChange={handleChange}
           textColor="inherit"
@@ -78,6 +80,7 @@ export function ColorTabs() {
         </Tabs>
       </Box>
       <Pagination valueTab={value} pages={pages} changePage={changePage} />
+      <BeersList />
     </div>
   );
 }

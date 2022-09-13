@@ -3,10 +3,10 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { BeersList } from './components/BeersList';
 import { ColorTabs } from './components/ColorTabs';
 import { useAppSelector } from './hooks/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+// import { CurrentBeer } from './components/CurrentBeer';
 
 function App() {
   const status = useAppSelector((state) => state.api.status);
@@ -33,12 +33,10 @@ function App() {
         </AppBar>
       </ThemeProvider>
       {status === 'loading' && <LinearProgress />}
-
+      {/* <CurrentBeer /> */}
       <div className="tabs">
         <ColorTabs />
       </div>
-
-      <BeersList />
     </Box>
   );
 }

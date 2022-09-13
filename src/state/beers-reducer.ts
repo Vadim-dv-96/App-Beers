@@ -2,7 +2,9 @@ import { beersApi } from '../api/beers-api';
 import { BeersType, SortValuesType } from '../components/BeerItem';
 import { setAppStatusAC } from './app-reducer';
 import { AppThunk } from './store';
+
 type FoodValue = 'pizza' | 'steak' | '';
+
 const initialState = {
   beers: [] as Array<BeersType>,
   sort: 'Without a filter' as SortValuesType,
