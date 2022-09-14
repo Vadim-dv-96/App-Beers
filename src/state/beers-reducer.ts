@@ -10,27 +10,24 @@ const initialState = {
   sort: 'Without a filter' as SortValuesType,
   numberPage: 1,
   food: '' as FoodValue,
+  isCurrentBeer: false,
 };
 type InitialStateType = typeof initialState;
 export const beersReducer = (state: InitialStateType = initialState, action: BeersActionsType): InitialStateType => {
   switch (action.type) {
     case 'GET-BEERS':
       return { ...state, beers: action.beers };
-
-    // case 'GET-BEERS-WITH-PIZZA':
-    //   return { ...state, beers: action.beersWithPizza };
     case 'GET-BEERS-WITH-FOOD':
       debugger;
       return { ...state, beers: action.beers, numberPage: action.numbPage, food: action.food };
-    // case 'GET-BEERS-WITH-STEAK':
-    //   return { ...state, beers: action.beersWithSteak };
-    // case 'GET-NEXT-BEERS':
-    //   return { ...state, beers: action.beers };
-    // case 'GET-NEXT-BEERS-FOR-STEAK':
-    //   return { ...state, beers: action.beersWithSteak };
     case 'SORT-BEERS': {
       return { ...state, sort: action.sortValue };
     }
+    case 'GET-CURRENT-BEER':
+      debugger;
+      return { ...state, beers: action.beer, isCurrentBeer: action.isCurrentBeer };
+    case 'BACK-TO-VIEW-ALL-BEERS':
+      return { ...state, beers: action.beers, isCurrentBeer: action.isCurrentBeer };
     default:
       return state;
   }
@@ -40,23 +37,17 @@ export const beersReducer = (state: InitialStateType = initialState, action: Bee
 export const getBeersAC = (beers: Array<BeersType>) => {
   return { type: 'GET-BEERS', beers } as const;
 };
-// export const getNextBeersAC = (beers: Array<BeersType>, numbPage: number) => {
-//   return { type: 'GET-NEXT-BEERS', beers, numbPage } as const;
-// };
-// export const getBeersWithPizzaAC = (beersWithPizza: Array<BeersType>) => {
-//   return { type: 'GET-BEERS-WITH-PIZZA', beersWithPizza } as const;
-// };
-// export const getBeersWithSteakAC = (beersWithSteak: Array<BeersType>) => {
-//   return { type: 'GET-BEERS-WITH-STEAK', beersWithSteak } as const;
-// };
-// export const getNextBeersForSteakAC = (beersWithSteak: Array<BeersType>, numbPage: number) => {
-//   return { type: 'GET-NEXT-BEERS-FOR-STEAK', beersWithSteak, numbPage } as const;
-// };
 export const sortBeersAC = (sortValue: SortValuesType) => {
   return { type: 'SORT-BEERS', sortValue } as const;
 };
 export const getBeersWithFoodAC = (beers: Array<BeersType>, numbPage: number, food: FoodValue) => {
   return { type: 'GET-BEERS-WITH-FOOD', beers, numbPage, food } as const;
+};
+export const getCurrentBeerAC = (beer: Array<BeersType>, isCurrentBeer: boolean) => {
+  return { type: 'GET-CURRENT-BEER', beer, isCurrentBeer } as const;
+};
+export const backToViewAllBeersAC = (beers: Array<BeersType>, isCurrentBeer: boolean) => {
+  return { type: 'BACK-TO-VIEW-ALL-BEERS', beers, isCurrentBeer } as const;
 };
 
 //TC
@@ -72,13 +63,33 @@ export const getBeersTC =
 export const getBeersWithFoodTC =
   (numbPage: number, food: FoodValue): AppThunk =>
   (dispatch) => {
-    debugger;
     dispatch(setAppStatusAC('loading'));
     beersApi.getBeersWithFood(food, numbPage).then((res) => {
       dispatch(getBeersWithFoodAC(res.data, numbPage, food));
       dispatch(setAppStatusAC('succeeded'));
     });
   };
+
+export const getCurrentTC =
+  (beerId: number): AppThunk =>
+  (dispatch) => {
+    dispatch(setAppStatusAC('loading'));
+    beersApi.getCurrentBeer(beerId).then((res) => {
+      debugger;
+      dispatch(getCurrentBeerAC(res.data, true));
+      dispatch(setAppStatusAC('succeeded'));
+    });
+  };
+export const backToViewAllBeersTC =
+  (numbPage: number): AppThunk =>
+  (dispatch) => {
+    dispatch(setAppStatusAC('loading'));
+    beersApi.getBeers(numbPage).then((res) => {
+      dispatch(backToViewAllBeersAC(res.data, false));
+      dispatch(setAppStatusAC('succeeded'));
+    });
+  };
+
 // export const getBeersWithPizzaTC = (): AppThunk => (dispatch) => {
 //   dispatch(setAppStatusAC('loading'));
 //   beersApi.getBeersWithPizza().then((res) => {
@@ -114,17 +125,14 @@ export const getBeersWithFoodTC =
 
 //types
 export type GetBeersActionType = ReturnType<typeof getBeersAC>;
-// export type GetBeersWithPizzaActionType = ReturnType<typeof getBeersWithPizzaAC>;
-// export type GetBeersWithSteakActionType = ReturnType<typeof getBeersWithSteakAC>;
-// export type GetNextBeersActionType = ReturnType<typeof getNextBeersAC>;
-// export type GetNextBeersForSteakActionType = ReturnType<typeof getNextBeersForSteakAC>;
 export type SortBeersActionType = ReturnType<typeof sortBeersAC>;
-export type GetBeersWithFoodACActionType = ReturnType<typeof getBeersWithFoodAC>;
+export type GetBeersWithFoodActionType = ReturnType<typeof getBeersWithFoodAC>;
+export type GetCurrentBeerActionType = ReturnType<typeof getCurrentBeerAC>;
+export type BackToViewAllBeersActionType = ReturnType<typeof backToViewAllBeersAC>;
 
 export type BeersActionsType =
   | GetBeersActionType
-  // | GetBeersWithPizzaActionType
-  // | GetBeersWithSteakActionType
-  // | GetNextBeersForSteakActionType
   | SortBeersActionType
-  | GetBeersWithFoodACActionType;
+  | GetBeersWithFoodActionType
+  | GetCurrentBeerActionType
+  | BackToViewAllBeersActionType;

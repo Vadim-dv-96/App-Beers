@@ -9,14 +9,13 @@ import { BeerItem } from './BeerItem';
 export const BeersList = () => {
   const dispatch = useAppDispatch();
   const numberPage = useAppSelector((state) => state.beer.numberPage);
+  const beers = useAppSelector(sortBeers);
 
   useEffect(() => {
     dispatch(getBeersTC(numberPage));
   }, [dispatch]);
 
   const [value, setValue] = useState('Without a filter');
-
-  const beers = useAppSelector(sortBeers);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
@@ -77,19 +76,6 @@ export const BeersList = () => {
               />
             </RadioGroup>
           </FormControl>
-          {/* <div className="filter-ascending">
-            <input style={{ marginRight: '10px' }} type="radio" name="radio" />
-            ABV ascending
-          </div>
-          <div className="filter-descending">
-            <input style={{ marginRight: '10px' }} type="radio" name="radio" />
-            ABV descending
-          </div>
-          <div className="filter-A-Z">
-            <input style={{ marginRight: '10px' }} type="radio" name="radio" />
-            A-Z
-          </div>
-          <div className="filter-Z-A"><input style={{ marginRight: '10px' }} type="radio" name="radio" />Z-A</div> */}
         </Card>
         <div className="beer-list">
           {beers.map((beers) => {

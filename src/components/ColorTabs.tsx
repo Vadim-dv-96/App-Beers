@@ -2,22 +2,18 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { useAppDispatch } from '../hooks/hooks';
-import {
-  getBeersTC,
-  getBeersWithFoodTC,
-  // getBeersWithPizzaTC,
-  // getBeersWithSteakTC,
-  // getNextBeersForSteakTC,
-  // getNextBeersTC,
-} from '../state/beers-reducer';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { getBeersTC, getBeersWithFoodTC } from '../state/beers-reducer';
 import { useState } from 'react';
 import { Pagination } from './Pagination';
 import { BeersList } from './BeersList';
+import { Navigate } from 'react-router-dom';
 
 export function ColorTabs() {
   const [value, setValue] = useState<'All beers' | 'with pizza' | 'with steak'>('All beers');
 
+  const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
+  debugger;
   const dispatch = useAppDispatch();
 
   const [pages, setPages] = useState({
@@ -33,12 +29,10 @@ export function ColorTabs() {
       [key]: page,
     }));
     if (key === 'with steak') {
-      debugger;
       // dispatch(getNextBeersForSteakTC(page));
       dispatch(getBeersWithFoodTC(page, 'steak'));
     }
     if (key === 'All beers') {
-      debugger;
       dispatch(getBeersTC(page));
     }
   };
@@ -63,6 +57,10 @@ export function ColorTabs() {
     dispatch(getBeersTC(pages['All beers']));
   };
 
+  if (isCurrentBeer) {
+    return <Navigate to={'currentBeer'} />;
+  }
+  debugger;
   return (
     <div>
       <Box sx={{ width: '100%' }}>

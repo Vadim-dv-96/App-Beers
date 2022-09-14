@@ -1,0 +1,25 @@
+.container-current-beer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+.card-current-beer {
+  margin-top: 10px;
+  max-width: 700px;
+  padding: 15px;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: row-reverse;
+}
+.content-item-current-beer {
+  margin-left: 20px;
+}
+.card-header-current-beer {
+  text-align: center;
+}
+.card-tagline span {
+  font-weight: 600;
+}
+.card-food_pairing p {
+  font-weight: 600;
+}
