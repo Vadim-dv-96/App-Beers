@@ -3,13 +3,12 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { FoodValue, getBeersTC, TabValueType } from '../state/beers-reducer';
+import { useState } from 'react';
 import { Pagination } from './Pagination';
 
-export function ColorTabs() {
+export function ColorTabs1() {
   const tabValue = useAppSelector<TabValueType>((state) => state.beer.tabValue);
-  const numberPage = useAppSelector<{ [key in TabValueType]: number }>((state) => state.beer.numberPage);
-  console.log(numberPage);
-
+  console.log(tabValue);
   // const [value, setValue] = useState<'All beers' | 'with pizza' | 'with steak'>(tabValue);
   // console.log(value);
 
@@ -21,26 +20,34 @@ export function ColorTabs() {
 
   const dispatch = useAppDispatch();
 
-  // const [pages, setPages] = useState<{ [key in TabValueType]: number }>({
-  //   'All beers': 1,
-  //   'with pizza': 1,
-  //   'with steak': 1,
-  // });
-  // console.log(pages);
+  const [pages, setPages] = useState<{ [key in TabValueType]: number }>({
+    'All beers': 1,
+    'with pizza': 1,
+    'with steak': 1,
+  });
+  console.log(pages);
 
-  // const changePage = (key: TabValueType, page: number) => {
-  //   setPages((prev) => ({
-  //     ...prev,
-  //     [key]: page,
-  //   }));
-  // };
+  const changePage = (key: TabValueType, page: number) => {
+    console.log(page);
+
+    setPages((prev) => ({
+      ...prev,
+      [key]: page,
+    }));
+    if (key === 'with steak') {
+      dispatch(getBeersTC(page, 'with steak', 'steak'));
+    }
+    if (key === 'All beers') {
+      dispatch(getBeersTC(page, 'All beers', null));
+    }
+  };
   const getBeerKey: { [key in TabValueType]: FoodValue } = {
     'All beers': null,
     'with pizza': 'pizza',
     'with steak': 'steak',
   };
   const beersHandler = (type: TabValueType) => {
-    dispatch(getBeersTC(numberPage[type], type, getBeerKey[type]));
+    dispatch(getBeersTC(pages[type], type, getBeerKey[type]));
   };
 
   // const beerswithPizzaHandler = () => {
@@ -70,7 +77,7 @@ export function ColorTabs() {
           <Tab onClick={() => beersHandler('with steak')} value="with steak" label="Beers that pair with steak" />
         </Tabs>
       </Box>
-      <Pagination tabValue={tabValue} numberPage={numberPage} />
+      {/* <Pagination valueTab={tabValue} pages={pages} changePage={changePage} /> */}
     </div>
   );
 }

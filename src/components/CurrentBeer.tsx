@@ -1,39 +1,50 @@
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import { Navigate } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { backToViewAllBeersTC } from '../state/beers-reducer';
+import { getCurrentTC } from '../state/beers-reducer';
 import '../currentBeer.css';
+import { useEffect } from 'react';
+import { RequestStatusType } from '../state/app-reducer';
+import { CircularProgress } from '@mui/material';
 
 export const CurrentBeer = () => {
   const dispatch = useAppDispatch();
-  const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
-  const beers = useAppSelector((state) => state.beer.beers);
-  const numberPage = useAppSelector((state) => state.beer.numberPage);
+  // const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
+  const status = useAppSelector<RequestStatusType>((state) => state.api.status);
+  const beer = useAppSelector((state) => state.beer.beers);
+  // const numberPage = useAppSelector((state) => state.beer.numberPage);
 
-  const backHandler = () => {
-    dispatch(backToViewAllBeersTC(numberPage));
-  };
+  // const backHandler = () => {
+  //   dispatch(backToViewAllBeersTC(numberPage));
+  // };
 
-  if (!isCurrentBeer) {
-    return <Navigate to={'/'} />;
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    dispatch(getCurrentTC(Number(id)));
+  }, [dispatch, id]);
+
+  if (status === 'loading') {
+    return (
+      <div style={{ position: 'fixed', left: '50%', top: '50%', textAlign: 'center' }}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
-    <>
+    <div>
       <div className="btn">
-        <Button
-          onClick={() => {
-            backHandler();
-          }}
-          size="medium"
-          variant="outlined"
-        >
-          Back
-        </Button>
+        <NavLink style={{ textDecoration: 'none' }} to={'/'}>
+          <Button size="medium" variant="outlined">
+            Back
+          </Button>
+        </NavLink>
       </div>
+
       <div className="container-current-beer">
-        {beers.map((beer) => {
+        {beer.map((beer) => {
           return (
             <Card key={beer.id} className="card-current-beer">
               <div className="content-item-current-beer">
@@ -52,8 +63,8 @@ export const CurrentBeer = () => {
                 <div className="card-food_pairing">
                   <p>Food pairing: </p>
                   <ul>
-                    {beer.food_pairing.map((f) => {
-                      return <li> {f} </li>;
+                    {beer.food_pairing.map((f, i) => {
+                      return <li key={i}> {f} </li>;
                     })}
                   </ul>
                 </div>
@@ -65,6 +76,6 @@ export const CurrentBeer = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

@@ -1,41 +1,36 @@
 import Button from '@mui/material/Button';
-import { useAppSelector } from '../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { getBeersTC, TabValueType } from '../state/beers-reducer';
 
 type PaginPropsType = {
-  valueTab: 'All beers' | 'with pizza' | 'with steak';
-  changePage: (key: 'All beers' | 'with pizza' | 'with steak', page: number) => void;
-  pages: { [key in 'All beers' | 'with pizza' | 'with steak']: number };
+  numberPage: { [key in TabValueType]: number };
+  tabValue: TabValueType;
 };
 
-export function Pagination({ valueTab, changePage, pages }: PaginPropsType) {
+export function Pagination(props: PaginPropsType) {
   const beers = useAppSelector((state) => state.beer.beers);
+  // const numberPage = useAppSelector<number>((state) => state.beer.numberPage);
 
-  // let [page, setPage] = useState<number>(pages[valueTab]);
+  // const tabValue = useAppSelector<TabValueType>((state) => state.beer.tabValue);
 
-  // const nextPage = (pageNumb: number) => {
-  //   // if (props.valueTab === 'with pizza') {
-  //   // }
-  //   // if (valueTab === 'with steak') {
-  //   //   dispatch(getNextBeersForSteakTC(pageNumb));
-  //   // }
-  //   // if (valueTab === 'All beers') {
-  //   //   dispatch(getNextBeersTC(pageNumb));
-  //   // }
-  // };
-  // const nextPage = (page: number) => {
-  //   props.nextPageHandler(page);
-  // };
-  const setPageinc = (pageNumb: number) => {
-    // const pageNumb = ++page;
-    // setPage(pageNumb);
-    // nextPage(pageNumb);
-    changePage(valueTab, pageNumb);
+  const dispatch = useAppDispatch();
+
+  const setPageinc = (numberPageInc: number) => {
+    if (props.tabValue === 'with steak') {
+      dispatch(getBeersTC(++numberPageInc, 'with steak', 'steak'));
+    }
+    if (props.tabValue === 'All beers') {
+      dispatch(getBeersTC(++numberPageInc, 'All beers', null));
+    }
   };
-  const setPagedec = (pageNumb: number) => {
-    // const pageNumb = --page;
-    // setPage(pageNumb);
-    // nextPage(pageNumb);
-    changePage(valueTab, pageNumb);
+
+  const setPagedec = (numberPageDec: number) => {
+    if (props.tabValue === 'with steak') {
+      dispatch(getBeersTC(--numberPageDec, 'with steak', 'steak'));
+    }
+    if (props.tabValue === 'All beers') {
+      dispatch(getBeersTC(--numberPageDec, 'All beers', null));
+    }
   };
 
   return (
@@ -44,18 +39,20 @@ export function Pagination({ valueTab, changePage, pages }: PaginPropsType) {
         size="small"
         variant="outlined"
         style={{ marginRight: '6px' }}
-        disabled={pages[valueTab] === 1}
-        onClick={() => setPagedec(--pages[valueTab])}
+        disabled={props.numberPage[props.tabValue] === 1}
+        onClick={() => setPagedec(props.numberPage[props.tabValue])}
       >
         back
       </Button>
-      <div> {pages[valueTab]} </div>
+      <div> {props.numberPage[props.tabValue]} </div>
       <Button
         disabled={beers.length < 15}
         size="small"
         variant="outlined"
         style={{ marginLeft: '6px' }}
-        onClick={() => setPageinc(++pages[valueTab])}
+        onClick={() => {
+          return setPageinc(props.numberPage[props.tabValue]);
+        }}
       >
         next
       </Button>

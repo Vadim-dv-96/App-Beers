@@ -1,10 +1,7 @@
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import { NavLink } from 'react-router-dom';
 import '../App.css';
-import { useAppDispatch } from '../hooks/hooks';
-import { getCurrentTC } from '../state/beers-reducer';
-
-export type SortValuesType = 'Without a filter' | 'ABV ascending' | 'ABV descending' | 'A-Z' | 'Z-A';
 
 type MaltType = {
   name: string;
@@ -53,11 +50,9 @@ export type BeersType = {
 };
 
 export const BeerItem = (props: BeersType) => {
-  const dispatch = useAppDispatch();
-
-  const learnMoreHandler = (beerId: number) => {
-    dispatch(getCurrentTC(beerId));
-  };
+  // const learnMoreHandler = (beerId: number) => {
+  //   dispatch(getCurrentTC(beerId));
+  // };
 
   return (
     <div className="container">
@@ -72,15 +67,11 @@ export const BeerItem = (props: BeersType) => {
           </div>
         </div>
         <div className="btn">
-          <Button
-            onClick={() => {
-              learnMoreHandler(props.id);
-            }}
-            size="small"
-            variant="outlined"
-          >
-            LEARN MORE
-          </Button>
+          <NavLink style={{ textDecoration: 'none' }} to={`/currentBeer/${props.id}`}>
+            <Button size="small" variant="outlined">
+              LEARN MORE
+            </Button>
+          </NavLink>
         </div>
       </Card>
     </div>

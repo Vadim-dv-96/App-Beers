@@ -3,15 +3,16 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { ColorTabs } from './components/ColorTabs';
 import { useAppSelector } from './hooks/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes } from 'react-router-dom';
 import { CurrentBeer } from './components/CurrentBeer';
+import { BeersList } from './components/BeersList';
+import { RequestStatusType } from './state/app-reducer';
 
 function App() {
-  const status = useAppSelector((state) => state.api.status);
-  const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
+  const status = useAppSelector<RequestStatusType>((state) => state.api.status);
+
   //dark mode for AppBar
   const darkTheme = createTheme({
     palette: {
@@ -36,15 +37,8 @@ function App() {
       {status === 'loading' && <LinearProgress />}
 
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="tabs">
-              <ColorTabs />
-            </div>
-          }
-        ></Route>
-        <Route path="currentBeer" element={<CurrentBeer />}></Route>
+        <Route path="/" element={<BeersList />}></Route>
+        <Route path="currentBeer/:id" element={<CurrentBeer />}></Route>
       </Routes>
     </Box>
   );

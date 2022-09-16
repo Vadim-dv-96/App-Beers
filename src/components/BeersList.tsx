@@ -1,29 +1,44 @@
-import { Card, FormControl, FormControlLabel, Radio } from '@mui/material';
+import { Card, CircularProgress, FormControl, FormControlLabel, Radio } from '@mui/material';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { sortBeers } from '../sort/sort';
-import { getBeersTC, sortBeersAC } from '../state/beers-reducer';
+import { RequestStatusType } from '../state/app-reducer';
+import { getBeersTC, sortBeersAC, SortValuesType } from '../state/beers-reducer';
 import { BeerItem } from './BeerItem';
+import { ColorTabs } from './ColorTabs';
 
 export const BeersList = () => {
   const dispatch = useAppDispatch();
   const numberPage = useAppSelector((state) => state.beer.numberPage);
   const beers = useAppSelector(sortBeers);
+  const tabValue = useAppSelector((state) => state.beer.tabValue);
+  const sort = useAppSelector<SortValuesType>((state) => state.beer.sort);
+  const status = useAppSelector<RequestStatusType>((state) => state.api.status);
+  const foodName = useAppSelector((state) => state.beer.food);
 
   useEffect(() => {
-    dispatch(getBeersTC(numberPage));
+    dispatch(getBeersTC(numberPage[tabValue], tabValue, foodName));
   }, [dispatch]);
 
-  const [value, setValue] = useState('Without a filter');
+  const [value, setValue] = useState(sort);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.currentTarget.value);
+    setValue(e.currentTarget.value as SortValuesType);
     console.log(e.currentTarget.value);
   };
 
+  if (status === 'loading') {
+    return (
+      <div style={{ position: 'fixed', left: '50%', top: '50%', textAlign: 'center' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
-    <>
+    <div>
+      <ColorTabs />
       <div className="main">
         <Card className="filter">
           <FormControl>
@@ -83,6 +98,6 @@ export const BeersList = () => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
