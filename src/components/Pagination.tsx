@@ -12,7 +12,6 @@ export function Pagination(props: PaginPropsType) {
   // const numberPage = useAppSelector<number>((state) => state.beer.numberPage);
 
   // const tabValue = useAppSelector<TabValueType>((state) => state.beer.tabValue);
-
   const dispatch = useAppDispatch();
 
   const setPageinc = (numberPageInc: number) => {
