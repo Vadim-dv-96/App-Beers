@@ -28,7 +28,6 @@ export const beersReducer = (state: InitialStateType = initialState, action: Bee
         beers: action.beers,
         tabValue: action.tabValue,
         food: action.food,
-        // numberPage: action.numbPage,
         numberPage: { ...state.numberPage, [action.tabValue]: action.numbPage },
       };
     case 'SORT-BEERS': {
@@ -51,9 +50,6 @@ export const sortBeersAC = (sortValue: SortValuesType) => {
 export const getCurrentBeerAC = (beer: Array<BeersType>) => {
   return { type: 'GET-CURRENT-BEER', beer } as const;
 };
-// export const setIncNumbAC = (numberPage: number) => {
-//   return { type: 'SET-INC-NUMB', numberPage } as const;
-// };
 
 //TC
 export const getBeersTC =
@@ -82,7 +78,5 @@ export const getCurrentTC =
 export type GetBeersActionType = ReturnType<typeof getBeersAC>;
 export type SortBeersActionType = ReturnType<typeof sortBeersAC>;
 export type GetCurrentBeerActionType = ReturnType<typeof getCurrentBeerAC>;
-// export type SetIncNumbActionType = ReturnType<typeof setIncNumbAC>;
 
 export type BeersActionsType = GetBeersActionType | SortBeersActionType | GetCurrentBeerActionType;
-// | SetIncNumbActionType;

@@ -8,32 +8,9 @@ import { Pagination } from './Pagination';
 export function ColorTabs() {
   const tabValue = useAppSelector<TabValueType>((state) => state.beer.tabValue);
   const numberPage = useAppSelector<{ [key in TabValueType]: number }>((state) => state.beer.numberPage);
-  console.log(numberPage);
-
-  // const [value, setValue] = useState<'All beers' | 'with pizza' | 'with steak'>(tabValue);
-  // console.log(value);
-
-  // const handleChange = (event: React.SyntheticEvent, newValue: 'All beers' | 'with pizza' | 'with steak') => {
-  //   setValue(newValue);
-  // };
-
-  // const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
 
   const dispatch = useAppDispatch();
 
-  // const [pages, setPages] = useState<{ [key in TabValueType]: number }>({
-  //   'All beers': 1,
-  //   'with pizza': 1,
-  //   'with steak': 1,
-  // });
-  // console.log(pages);
-
-  // const changePage = (key: TabValueType, page: number) => {
-  //   setPages((prev) => ({
-  //     ...prev,
-  //     [key]: page,
-  //   }));
-  // };
   const getBeerKey: { [key in TabValueType]: FoodValue } = {
     'All beers': null,
     'with pizza': 'pizza',
@@ -60,7 +37,6 @@ export function ColorTabs() {
         <Tabs
           centered
           value={tabValue}
-          // onChange={handleChange}
           textColor="inherit"
           indicatorColor="primary"
           aria-label="secondary tabs example"

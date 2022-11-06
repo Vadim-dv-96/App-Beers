@@ -50,10 +50,6 @@ export type BeersType = {
 };
 
 export const BeerItem = (props: BeersType) => {
-  // const learnMoreHandler = (beerId: number) => {
-  //   dispatch(getCurrentTC(beerId));
-  // };
-
   return (
     <div className="container">
       <Card className="content">

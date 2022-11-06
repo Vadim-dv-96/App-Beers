@@ -9,9 +9,6 @@ type PaginPropsType = {
 
 export function Pagination(props: PaginPropsType) {
   const beers = useAppSelector((state) => state.beer.beers);
-  // const numberPage = useAppSelector<number>((state) => state.beer.numberPage);
-
-  // const tabValue = useAppSelector<TabValueType>((state) => state.beer.tabValue);
   const dispatch = useAppDispatch();
 
   const setPageinc = (numberPageInc: number) => {

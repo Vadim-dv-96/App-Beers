@@ -10,14 +10,9 @@ import { CircularProgress } from '@mui/material';
 
 export const CurrentBeer = () => {
   const dispatch = useAppDispatch();
-  // const isCurrentBeer = useAppSelector((state) => state.beer.isCurrentBeer);
+
   const status = useAppSelector<RequestStatusType>((state) => state.api.status);
   const beer = useAppSelector((state) => state.beer.beers);
-  // const numberPage = useAppSelector((state) => state.beer.numberPage);
-
-  // const backHandler = () => {
-  //   dispatch(backToViewAllBeersTC(numberPage));
-  // };
 
   const { id } = useParams<{ id: string }>();
 
