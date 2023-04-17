@@ -1,5 +1,6 @@
 .main {
   display: flex;
+  flex-wrap: wrap;
 }
 .beer-list {
   display: flex;
@@ -51,9 +52,17 @@
   justify-content: center;
   align-items: center;
 }
-.tabs {
+/* .tabs {
   display: flex;
   justify-content: center;
+} */
+.tabsParent {
+  align-items: center;
+}
+@media (max-width: 493px) {
+  .main {
+    justify-content: center;
+  }
 }
 .filter {
   font-size: 18px;

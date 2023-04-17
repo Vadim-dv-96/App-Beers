@@ -55,11 +55,9 @@ export const getCurrentBeerAC = (beer: Array<BeersType>) => {
 export const getBeersTC =
   (numbPage: number, tabValue: TabValueType, food: FoodValue): AppThunk =>
   (dispatch) => {
-    debugger;
     dispatch(setAppStatusAC('loading'));
     beersApi.getBeers(numbPage, food).then((res) => {
       dispatch(getBeersAC(res.data, tabValue, food, numbPage));
-      console.log(numbPage);
       dispatch(setAppStatusAC('succeeded'));
     });
   };
